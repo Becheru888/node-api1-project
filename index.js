@@ -37,10 +37,25 @@ server.post('/addUser', (req, res) => {
     })
 })
 
-server.put('/editUser/:id', (res, req) => {
-
+server.put('/editUser/:id', (req, res) => {
+  const userId = req.params.id;
+  const updatedUser = req.body;
+  DB.update(Number(userId), updatedUser).then(data => {
+    res.status(200).json(data)
+  }).catch(error => {
+    res.status(400).json({error: 'Something went wrong'})
+  })
 })
 
+
+server.delete('/delete/:id', (req, res) => {
+  DB.remove(req.params.id)
+  .then(data => {
+    res.status(200).json(data)
+  }).catch(error => {
+    res.status(400).json({error: 'Something went wrong'})
+  })
+})
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
